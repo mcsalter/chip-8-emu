@@ -369,13 +369,11 @@ void execute(struct CHIP_8 *cpu, struct Operation *op){
   case DISPLAY_XY_N:
     {
       uint8_t temp_I = cpu->I;
-      // fprintf(stderr, "%d, %d, %d\n", cpu->registers[op->arguments[0]],cpu->registers[op->arguments[1]], temp_I);
       uint8_t x_pos = cpu->registers[op->arguments[0]] & 63;
       uint8_t y_pos = cpu->registers[op->arguments[1]] & 31;
       cpu->registers[0xF] = 0x0;
       for (int y = 0; y < op->arguments[2]; ++y){ 
 	int value_to_draw = cpu->Memory[temp_I];
-	// fprintf(stderr, "%08b\n", value_to_draw);
 	for(int x = 0; x < 8; ++x){ 
 	  if ((x >= CHIP_8_SCREEN_WIDTH) || (y >= CHIP_8_SCREEN_HEIGHT)){
 	    continue;
@@ -387,7 +385,7 @@ void execute(struct CHIP_8 *cpu, struct Operation *op){
 	  cpu->graphics[y_pos+y][x_pos+x] ^= ((value_to_draw >> (8 - x)) & 0x01) ;//temp_val;
 
 	}
-	temp_I++;
+	++temp_I;
       }
       break;
     }
