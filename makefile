@@ -4,7 +4,7 @@ objs		:= main.o chip8.o gui.o
 
 # Compiler Args:
 CC		:= gcc
-CCFLAGS		:= -Wall -Werror -std=c2x
+CCFLAGS		:= -Wall -Werror -std=c2x -fstack-protector
 LINKERFLAGS 	:= -lncurses -ltinfo #-lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
 

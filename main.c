@@ -48,6 +48,7 @@ int load_chip8_cart(struct CHIP_8* cpu, const char cart_file_pointer[]){
 int main (int argc, char *argv[]) {
 
   // getting the option flags from input
+  //setlocale(LC_ALL, "UTF8");
   int file_flag = 0;
   int opt = 0;
   int ncurses_flag = 0;
@@ -89,7 +90,7 @@ int main (int argc, char *argv[]) {
       print_screen(CPU, &GUI);
 
       
-      ch = getch();
+       ch = getch();
       if(ch == 'q'){
 	break;
       }

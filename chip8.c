@@ -358,7 +358,7 @@ void execute(struct CHIP_8 *cpu, struct Operation *op){
     assert(false);
     break;
   case SET_I_ADDR:
-    cpu->I = bitshift_MM(op->arguments);
+    cpu->I = bitshift_MMM(op->arguments);
     break;
   case JMP_ADDR_REG:
     assert(false);
@@ -369,8 +369,8 @@ void execute(struct CHIP_8 *cpu, struct Operation *op){
   case DISPLAY_XY_N:
     {
       uint8_t temp_I = cpu->I;
-      uint8_t x_pos = cpu->registers[op->arguments[0]] & 63;
-      uint8_t y_pos = cpu->registers[op->arguments[1]] & 31;
+      uint8_t x_pos = cpu->registers[op->arguments[0]] % 63; // modulo to get everything within the horizontal screen length
+      uint8_t y_pos = cpu->registers[op->arguments[1]] % 31; // modulo to get everything within the vertical screen length
       cpu->registers[0xF] = 0x0;
       for (int y = 0; y < op->arguments[2]; ++y){ 
 	int value_to_draw = cpu->Memory[temp_I];
@@ -378,14 +378,15 @@ void execute(struct CHIP_8 *cpu, struct Operation *op){
 	  if ((x >= CHIP_8_SCREEN_WIDTH) || (y >= CHIP_8_SCREEN_HEIGHT)){
 	    continue;
 	  }
-	  if((cpu->graphics[y_pos + y][x_pos + x] & (0x01)) == 1 && (value_to_draw >> (8 - x) & (0x01)) == 0x1){
+	  if((cpu->graphics[y_pos + y][x_pos + x] & (0x01)) == 0x1 &&
+	     ((value_to_draw >> (8 - x)) & (0x01)) == 0x1){
 	    cpu->registers[0xf] = 0x1;
 	  }
 	  //uint8_t temp_val = (cpu->graphics[y_pos + y][x_pos + x] & (0x01)) ^ ((value_to_draw >>  (7 - x)) & (0x01));
 	  cpu->graphics[y_pos+y][x_pos+x] ^= ((value_to_draw >> (8 - x)) & 0x01) ;//temp_val;
 
 	}
-	++temp_I;
+	temp_I++;
       }
       break;
     }

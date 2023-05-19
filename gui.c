@@ -26,7 +26,6 @@ void initGui(struct GUI* gui){
   else{
     assert(false);
   }
-  
   gui->graphic_window = newwin(GRAPHIC_WINDOW_SIZE_VERTICAL,
 			       GRAPHIC_WINDOW_SIZE_HORIZONTAL,
 			       GAP,
@@ -51,6 +50,11 @@ void initGui(struct GUI* gui){
 			       COMMAND_WINDOW_SIZE_HORIZONTAL,
 			       COMMAND_WINDOW_VERTICAL_OFFSET,
 			       GRAPHIC_WINDOW_HORIZONTAL_OFFSET);
+  
+  gui->binary_mem_window = newwin(BINARY_MEM_WINDOW_SIZE_VERTICAL,
+				  BINARY_MEM_WINDOW_SIZE_HORIZONTAL,
+				  GAP,
+				  BINARY_MEM_WINDOW_HORIZONTAL_OFFSET);
 
   box(gui->graphic_window, 0,0);
   mvwprintw(gui->graphic_window, 0, 1, "SCREEN");
@@ -63,6 +67,8 @@ void initGui(struct GUI* gui){
   mvwprintw(gui->active_operation_window, 0, 1, "CURR OP");
   box(gui->command_window, 0,0);
   mvwprintw(gui->command_window, 0, 1, "COMMANDS");
+  box(gui->binary_mem_window, 0,0);
+  mvwprintw(gui->binary_mem_window, 0, 1, "BINARY MEM");
   refresh();
 }
 
@@ -73,7 +79,7 @@ void print_screen(struct CHIP_8 CPU, struct GUI* gui){
   for(int y = 0; y < CHIP_8_SCREEN_HEIGHT; y++){
     for(int x = 0; x < CHIP_8_SCREEN_WIDTH; x++){
       if(CPU.graphics[y][x] == 1){
-	val = '#';
+	val = ACS_CKBOARD; //'#';
       } if(CPU.graphics[y][x] == 0){
 	val = ' ';
       }
@@ -106,10 +112,15 @@ void print_screen(struct CHIP_8 CPU, struct GUI* gui){
     mvwprintw(gui->register_window, 1, 1 + (itr*11) ,"reg %x: %2x", itr, CPU.registers[itr]);
     mvwprintw(gui->register_window, 2, 1 + (itr*11) ,"reg %x: %2x", itr + 8, CPU.registers[itr+8]);
   }
+  mvwprintw(gui->register_window,3,1, "I %3x ",CPU.I);
+  wprintw(gui->register_window, "memory at I: %b %b", CPU.Memory[CPU.I - 1], CPU.Memory[CPU.I]);
+  
+  
   // refresh all the windows
   wnoutrefresh(gui->active_operation_window);
   wnoutrefresh(gui->graphic_window);
   wnoutrefresh(gui->memory_window);
   wnoutrefresh(gui->register_window);
+  wnoutrefresh(gui->binary_mem_window);
   doupdate();
 }

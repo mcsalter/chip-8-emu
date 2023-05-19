@@ -1,6 +1,6 @@
 #ifndef __GUI_H__
 #define __GUI_H__
-#include <curses.h>
+#include <ncurses.h>
 #include <stdlib.h>
 
 #include "chip8.h"
@@ -12,12 +12,15 @@
 #define GRAPHIC_WINDOW_HORIZONTAL_OFFSET 76 //graphic window horizontal + 2 gap (used for ao, memory, command offsets)
 
 #define REGISTER_WINDOW_SIZE_HORIZONTAL 88//176
-#define REGISTER_WINDOW_SIZE_VERTICAL 4
+#define REGISTER_WINDOW_SIZE_VERTICAL 5
 #define REGISTER_WINDOW_VERTICAL_OFFSET 44 //graphic window vertical + 2 gap
 
 #define MEMORY_WINDOW_SIZE_HORIZONTAL 9
 #define MEMORY_WINDOW_SIZE_VERTICAL 13
 
+#define BINARY_MEM_WINDOW_HORIZONTAL_OFFSET 86
+#define BINARY_MEM_WINDOW_SIZE_HORIZONTAL 14 // 8 bits + 3 digit mem pointer + boarders + space
+#define BINARY_MEM_WINDOW_SIZE_VERTICAL 20
 
 #define AO_WINDOW_SIZE_HORIZONTAL 9
 #define AO_WINDOW_SIZE_VERTICAL 3
@@ -35,8 +38,7 @@ struct GUI{
   WINDOW *memory_window;
   WINDOW *active_operation_window;
   WINDOW *command_window;
-
-
+  WINDOW *binary_mem_window;
 };
 
 void initGui(struct GUI* gui);
