@@ -15,7 +15,7 @@ Q = @
 endif
 
 ifeq ($(D),1) # debug off by default
-CCFLAGS += -g
+CCFLAGS += -ggdb
 else
 CCFLAGS += -O2
 endif
